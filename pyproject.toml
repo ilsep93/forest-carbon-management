@@ -14,6 +14,7 @@ earthengine-api = "^1.2.0"
 pyproj = "^3.7.0"
 geopandas = "^1.0.1"
 setuptools = "^75.3.0"
+mss = "^9.0.2"
 
 
 [build-system]
