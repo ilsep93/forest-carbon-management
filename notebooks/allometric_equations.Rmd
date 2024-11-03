@@ -1,0 +1,105 @@
+---
+title: "maya_biosphere_allometric_equations"
+output: html_document
+date: "2024-11-03"
+---
+
+```{r setup, include=FALSE}
+library(allometric)
+library(tidyverse)
+```
+
+```{r}
+install_models()
+allometric_models <- load_models()
+```
+
+```{r}
+biomass_models <- allometric_models %>%
+  filter(model_type == "tree biomass")
+```
+
+Terminalia Amazonia
+
+    Family: Combretaceae
+    Genus: Terminalia
+    Species: amazonica
+
+Swietenia macrophylla
+
+    Family: Meliaceae
+    Genus: Swietenia
+    Species: macrophylla
+
+Cedrela odorata
+
+    Family: Meliaceae
+    Genus: Cedrela
+    Species: odorata
+
+Lysiloma spp.
+
+    Family: Fabaceae (Leguminosae)
+    Genus: Lysiloma
+    Species: Multiple species within the genus (spp. denotes several species)
+
+Lonchocarpus castilloi
+
+    Family: Fabaceae (Leguminosae)
+    Genus: Lonchocarpus
+    Species: castilloi
+
+Vochysia hondurensis
+
+    Family: Vochysiaceae
+    Genus: Vochysia
+    Species: hondurensis
+
+Calophyllum brasiliense
+
+    Family: Calophyllaceae
+    Genus: Calophyllum
+    Species: brasiliense
+
+```{r}
+# Species list
+species_list <- list(
+  list(family = "Combretaceae", genus = "Terminalia", species = "amazonica"),
+  list(family = "Meliaceae", genus = "Swietenia", species = "macrophylla"),
+  list(family = "Meliaceae", genus = "Cedrela", species = "odorata"),
+  list(family = "Fabaceae", genus = "Lysiloma", species = "spp."),
+  list(family = "Fabaceae", genus = "Lonchocarpus", species = "castilloi"),
+  list(family = "Vochysiaceae", genus = "Vochysia", species = "hondurensis"),
+  list(family = "Calophyllaceae", genus = "Calophyllum", species = "brasiliense")
+)
+```
+
+No species-specific models are available.
+```{r}
+# Initialize an empty list to store results
+results_list <- list()
+
+# Loop through each species and check for models
+for (species_info in species_list) {
+  # Create Taxon object
+  taxon <- Taxon(
+    family = species_info$family,
+    genus = species_info$genus,
+    species = species_info$species
+  )
+  
+  # Filter for models corresponding to the taxon
+  species_models <- allometric_models %>%
+    filter(map_lgl(taxa, ~ taxon %in% .))
+  
+  # Store the results in the results_list
+  results_list[[paste(species_info$genus, species_info$species, sep = "_")]] <- species_models
+}
+
+results_df <- bind_rows(results_list, .id = "species")
+```
+
+```{r}
+results_df
+```
+
