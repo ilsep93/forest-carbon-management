@@ -4,6 +4,10 @@ version = "0.1.0"
 description = "Environment for Forest Carbon Management certificate"
 authors = ["Ilse Paniagua <ilsep@umich.edu>"]
 package-mode= false
+# Run  `ln -s ../../utils` utils
+packages = [
+    { include="utils", from="." },
+]
 
 [tool.poetry.dependencies]
 python = "^3.12"
