@@ -1,4 +1,6 @@
 import geemap
+import matplotlib.colors as mcolors
+import matplotlib.pyplot as plt
 from ee import FeatureCollection, Image
 
 forest_type_dict = {
@@ -37,6 +39,18 @@ land_cover_dict = {
 }
 
 
+def matplotlib_ramp_to_hexcodes(color_ramp: str, n_colors: int = 9) -> list:
+    cmap = plt.get_cmap(color_ramp)
+
+    # Generate the colors
+    colors = [cmap(i / (n_colors - 1)) for i in range(n_colors)]
+
+    # Convert to hex
+    hex_colors = [mcolors.rgb2hex(color) for color in colors]
+
+    return hex_colors
+
+
 def create_geemap(
     image: Image,
     data_viz: dict,
@@ -56,7 +70,7 @@ def create_geemap(
     if continuous:
         m.add_colorbar(
             data_viz,
-            label=map_title,
+            # label=map_title,
             layer_name=map_title,
             orientation="horizontal",
         )
